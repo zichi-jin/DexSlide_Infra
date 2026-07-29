@@ -2,37 +2,96 @@
     "version": 3,
     "configurePresets": [
         {
-            "name": "default",
+            "name": "board-base",
             "hidden": true,
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/${presetName}",
-		    "toolchainFile": "${sourceDir}/cmake/gcc-arm-none-eabi.cmake",
+            "cacheVariables": {}
+        },
+        {
+            "name": "joints-debug",
+            "inherits": "board-base",
+            "binaryDir": "${sourceDir}/build/joints_f103/Debug",
+            "toolchainFile": "${sourceDir}/firmware/joints_f103/cmake/gcc-arm-none-eabi.cmake",
             "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "DEXSLIDE_BOARD": "joints_f103"
             }
         },
         {
-            "name": "Debug",
-            "inherits": "default",
+            "name": "joints-release",
+            "inherits": "board-base",
+            "binaryDir": "${sourceDir}/build/joints_f103/Release",
+            "toolchainFile": "${sourceDir}/firmware/joints_f103/cmake/gcc-arm-none-eabi.cmake",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Release",
+                "DEXSLIDE_BOARD": "joints_f103"
             }
         },
         {
-            "name": "Release",
-            "inherits": "default",
+            "name": "tactile-debug",
+            "inherits": "board-base",
+            "binaryDir": "${sourceDir}/build/tactile_h562/Debug",
+            "toolchainFile": "${sourceDir}/firmware/tactile_h562/cmake/gcc-arm-none-eabi.cmake",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "DEXSLIDE_BOARD": "tactile_h562"
+            }
+        },
+        {
+            "name": "tactile-release",
+            "inherits": "board-base",
+            "binaryDir": "${sourceDir}/build/tactile_h562/Release",
+            "toolchainFile": "${sourceDir}/firmware/tactile_h562/cmake/gcc-arm-none-eabi.cmake",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "DEXSLIDE_BOARD": "tactile_h562"
+            }
+        },
+        {
+            "name": "tactile-raw-debug",
+            "inherits": "board-base",
+            "binaryDir": "${sourceDir}/build/tactile_h562_raw/Debug",
+            "toolchainFile": "${sourceDir}/firmware/tactile_h562_raw/cmake/gcc-arm-none-eabi.cmake",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "DEXSLIDE_BOARD": "tactile_h562_raw"
+            }
+        },
+        {
+            "name": "tactile-raw-release",
+            "inherits": "board-base",
+            "binaryDir": "${sourceDir}/build/tactile_h562_raw/Release",
+            "toolchainFile": "${sourceDir}/firmware/tactile_h562_raw/cmake/gcc-arm-none-eabi.cmake",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "DEXSLIDE_BOARD": "tactile_h562_raw"
             }
         }
     ],
     "buildPresets": [
         {
-            "name": "Debug",
-            "configurePreset": "Debug"
+            "name": "joints-debug",
+            "configurePreset": "joints-debug"
         },
         {
-            "name": "Release",
-            "configurePreset": "Release"
+            "name": "joints-release",
+            "configurePreset": "joints-release"
+        },
+        {
+            "name": "tactile-debug",
+            "configurePreset": "tactile-debug"
+        },
+        {
+            "name": "tactile-release",
+            "configurePreset": "tactile-release"
+        },
+        {
+            "name": "tactile-raw-debug",
+            "configurePreset": "tactile-raw-debug"
+        },
+        {
+            "name": "tactile-raw-release",
+            "configurePreset": "tactile-raw-release"
         }
     ]
 }

@@ -1,68 +1,37 @@
 cmake_minimum_required(VERSION 3.22)
 
-#
-# This file is generated only once,
-# and is not re-generated if converter is called multiple times.
-#
-# User is free to modify the file as much as necessary
-#
+project(dexslide_infra LANGUAGES NONE)
 
-# Setup compiler settings
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_C_EXTENSIONS ON)
+set(DEXSLIDE_BOARD "" CACHE STRING "Firmware board to build")
+set_property(CACHE DEXSLIDE_BOARD PROPERTY STRINGS
+    joints_f103
+    tactile_h562
+    tactile_h562_raw
+)
 
-
-# Define the build type
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Debug")
+if(NOT DEXSLIDE_BOARD)
+    message(FATAL_ERROR
+        "DEXSLIDE_BOARD is not set.\n"
+        "Use one of:\n"
+        "  cmake -DDEXSLIDE_BOARD=joints_f103 ...\n"
+        "  cmake -DDEXSLIDE_BOARD=tactile_h562 ...\n"
+        "  cmake -DDEXSLIDE_BOARD=tactile_h562_raw ..."
+    )
 endif()
 
-# Set the project name
-set(CMAKE_PROJECT_NAME dexslide_stm32)
-
-# Enable compile command to ease indexing with e.g. clangd
-set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
-
-# Core project settings
-project(${CMAKE_PROJECT_NAME})
-message("Build type: " ${CMAKE_BUILD_TYPE})
-
-# Enable CMake support for ASM and C languages
-enable_language(C ASM)
-
-# Create an executable object type
-add_executable(${CMAKE_PROJECT_NAME})
-
-# Add STM32CubeMX generated sources
-add_subdirectory(cmake/stm32cubemx)
-
-# Link directories setup
-target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user defined library search paths
-)
-
-# Add sources to executable
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user sources here
-)
-
-# Add include paths
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user defined include paths
-)
-
-# Add project symbols (macros)
-target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user defined symbols
-)
-
-# Remove wrong libob.a library dependency when using cpp files
-list(REMOVE_ITEM CMAKE_C_IMPLICIT_LINK_LIBRARIES ob)
-
-# Add linked libraries
-target_link_libraries(${CMAKE_PROJECT_NAME}
-    stm32cubemx
-
-    # Add user defined libraries
-)
+if(DEXSLIDE_BOARD STREQUAL "joints_f103")
+    add_subdirectory(firmware/joints_f103)
+elseif(DEXSLIDE_BOARD STREQUAL "tactile_h562")
+    if(EXISTS "${CMAKE_SOURCE_DIR}/firmware/tactile_h562/CMakeLists.txt")
+        add_subdirectory(firmware/tactile_h562)
+    else()
+        message(FATAL_ERROR
+            "firmware/tactile_h562 has no generated CubeMX CMake project yet.\n"
+            "Generate the STM32H562VGT6 project in firmware/tactile_h562 first."
+        )
+    endif()
+elseif(DEXSLIDE_BOARD STREQUAL "tactile_h562_raw")
+    add_subdirectory(firmware/tactile_h562_raw)
+else()
+    message(FATAL_ERROR "Unknown DEXSLIDE_BOARD: ${DEXSLIDE_BOARD}")
+endif()

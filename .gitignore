@@ -15,9 +15,27 @@ __pycache__/
 
 .vscode/
 .idea/
+.workflow/
+AGENTS.md
+CLAUDE.md
+*.log
 
 .DS_Store
 Thumbs.db
 
-!.settings/
+**/.settings/
+**/.mxproject
+firmware/*/.clangd
 !*.ioc
+
+# CMSIS-DSP examples are not used by the current board CMake targets.
+firmware/*/Drivers/CMSIS/DSP/
+firmware/*/Drivers/CMSIS/Core/
+firmware/*/Drivers/CMSIS/Core_A/
+firmware/*/Drivers/CMSIS/DAP/
+firmware/*/Drivers/CMSIS/NN/
+firmware/*/Drivers/CMSIS/RTOS/
+firmware/*/Drivers/CMSIS/RTOS2/
+
+# Proprietary reference material; keep it local and never publish it.
+/docs/*通信协议*.md
